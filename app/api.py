@@ -2,6 +2,13 @@ from app.models import Import, Citizen
 from app import db
 from app import validators
 from datetime import datetime as dt
+import numpy as np
+
+
+def count_age(citizen):
+    today = dt.today()
+    correction = 0 if (today.month, today.day) >= (citizen.birth_date.month, citizen.birth_date.day) else 1
+    return today.year - citizen.birth_date.year - correction
 
 
 def create_citizen(*, import_id, data):
@@ -151,4 +158,46 @@ def get(import_id):
     return response, 200
 
 
+def get_pres(import_id):
+    sep = ','
+    try:
+        import_ = db.session.query(Import).filter_by(import_id=import_id).one()
+    except:
+        return False, 400
+    response = {str(key): list() for key in range(1, 13)}
+    for citizen in import_.citizens:
+        relatives = [int(id_) for id_ in citizen.relatives.split(sep) if id_]
+        pres_per_month = {key: 0 for key in range(1, 13)}
+        for relative_id in relatives:
+            relative = [rel for rel in import_.citizens if rel.citizen_id == relative_id][0]
+            month = relative.birth_date.month
+            pres_per_month[month] += 1
+        for key, value in pres_per_month.items():
+            if value > 0:
+                dct = {'citizen_id': citizen.citizen_id,
+                       'presents': value}
+                response[str(key)].append(dct)
+    return response, 200
+
+
+def get_stat(import_id):
+    try:
+        import_ = db.session.query(Import).filter_by(import_id=import_id).one()
+    except:
+        return False, 400
+    cities = {}
+    for citizen in import_.citizens:
+        if citizen.town not in cities.keys():
+            cities[citizen.town] = [count_age(citizen)]
+        else:
+            cities[citizen.town].append(count_age(citizen))
+    response = []
+    for city, ages in cities.items():
+        dct = {'town': city,
+               'p50': round(np.percentile(ages, 50), 2),
+               'p75': round(np.percentile(ages, 75), 2),
+               'p99': round(np.percentile(ages, 99), 2)}
+        response.append(dct)
+    return response, 200
+                
 

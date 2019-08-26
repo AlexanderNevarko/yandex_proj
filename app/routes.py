@@ -43,3 +43,22 @@ def get_set(import_id):
     else:
         abort(code)
 
+
+@app.route('/imports/<int:import_id>/citizens/birthdays', methods=['GET'])
+def get_presents(import_id):
+    response, code = api.get_pres(import_id)
+    if code == 200:
+        json_ = dict(data=response)
+        return jsonify(json_), 200
+    else:
+        abort(code)
+
+
+@app.route('/imports/<int:import_id>/towns/stat/percentile/age', methods=['GET'])
+def get_statistics(import_id):
+    response, code = api.get_stat(import_id)
+    if code == 200:
+        json_ = dict(data=response)
+        return jsonify(json_), 200
+    else:
+        abort(code)

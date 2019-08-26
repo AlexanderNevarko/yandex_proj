@@ -46,7 +46,7 @@ def check_citizen_fields(*, data, citizen):
                 if len(value) < 1 or len(value) > 256:
                     return False
                 elif not any(ch.isdigit() for ch in value) and \
-                     not any(ch.isalpha for ch in value):
+                     not any(ch.isalpha() for ch in value):
                     return False
             elif key == 'name':
                 if not value or len(value) > 256:
@@ -77,7 +77,7 @@ def check_data(data):
 
 
 def check_fields(*, import_, citizen, diff):
-    str_fields = ('town', 'street', 'building', 'name', 'gender', 'bith_date')
+    str_fields = ('town', 'street', 'building', 'name', 'gender')
     for key, value in diff.items():
         if key in str_fields:
             if not isinstance(value, str):
@@ -94,6 +94,9 @@ def check_fields(*, import_, citizen, diff):
             elif key == 'gender':
                 if value not in ('male', 'female'):
                     return False
+        elif key == 'birth_date':
+            if not check_date(value):
+                return False
         elif key == 'apartment':
             if not isinstance(value, int):
                 return False
