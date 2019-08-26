@@ -12,50 +12,38 @@
 
 Далее нужно склонировать репозиторий:
 
-.. code-block:: bash
-
-	$ git clone https://github.com/AlexanderNevarko/yandex_proj.git
+	`$ git clone https://github.com/AlexanderNevarko/yandex_proj.git`
 
 Логин и пароль, к сожалению, выложить не могу :)
 
 Далее необходимо перейти в директорию проекта,
 удалить файлы с миграциями БД и создать вирутальное окружение:
 
-.. code-block:: bash
-
-    $ cd yandex_proj
-    $ rm -rf migrations
-    $ python3 -m venv venv
+    `{$ cd yandex_proj
+      $ rm -rf migrations
+      $ python3 -m venv venv}`
 
 После этого необходимо установить pip, а затем и все необходимы пакеты
 (необходимы права администратора или знание пароля):
 
-.. code-block:: bash
-
-    $ sudo apt install python3-pip
-    $ pip install --upgrade pip
-    $ pip install -r requirements.txt
+    `{$ sudo apt ins`{tall python3-pip
+      $ pip install --upgrade pip
+      $ pip install -r requirements.txt}`
 
 После успешного выполнения этих команд, инициализируем базу данных:
-
-.. code-block:: bash
     
-    $ flask db init
-    $ flask db migrate -m "init"
-    $ flask db upgrade
+   `{ $ flask db init
+      $ flask db migrate -m "init"
+      $ flask db upgrade}`
 
 До запуска сервера осталась одна команда!
 
-.. code-block:: bash
-
-    $ flask run --host=0.0.0.0 --port=8080
+    `$ flask run --host=0.`{0.0.0 --port=8080`
 
 Если вы хотите запустить сервер в фоне, чтобы после 
 разлогинивания он продолжил работать, нужно выполнить другую команду:
 
-.. code-block:: bash
-
-    $ flask run --host=0.0.0.0 --port=8080 &> /dev/null &
+    `$ flask run --host=0.0.0.0 --port=808`{0 &> /dev/null &`
 
 Спасибо за внимание!
 При возникновении вопросов, со мной можно связаться в телеграм: @alex_nevarko
